@@ -1,3 +1,4 @@
+// There are currently 15 tests in this file ==========================================
 import mongoose from 'mongoose'
 import { describe, expect, test, beforeEach } from '@jest/globals'
 import {
@@ -5,6 +6,8 @@ import {
   listAllRecipes,
   listRecipesByAuthor,
   getRecipeById,
+  updateRecipe,
+  deleteRecipe,
 } from '../services/recipes.js'
 import { Recipe } from '../db/models/recipe.js'
 
@@ -135,5 +138,57 @@ describe('Getting a post', () => {
   test('Should fail if the id does not exist', async () => {
     const recipe = await getRecipeById('000000000000000000000000')
     expect(recipe).toEqual(null)
+  })
+})
+
+// Tests for updating a recipe ================================================
+describe('Updating recipes', () => {
+  test('Should update the specified property', async () => {
+    await updateRecipe(createdSampleRecipes[0]._id, {
+      author: 'Test Author',
+    })
+    const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
+    expect(updatedRecipe.author).toEqual('Test Author')
+  })
+
+  test('should not update other properties', async () => {
+    await updateRecipe(createdSampleRecipes[0]._id, {
+      author: 'Test Author',
+    })
+    const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
+    expect(updatedRecipe.title).toEqual('Sample Recipe 1')
+  })
+
+  test('should update the updatedAt timestamp', async () => {
+    await updateRecipe(createdSampleRecipes[0]._id, {
+      author: 'Test Author',
+    })
+    const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
+    expect(updatedRecipe.updatedAt.getTime()).toBeGreaterThan(
+      createdSampleRecipes[0].updatedAt.getTime(),
+    )
+  })
+
+  test('should fail if the id does not exist', async () => {
+    const recipe = await updateRecipe('000000000000000000000000', {
+      author: 'Test Author',
+    })
+    expect(recipe).toEqual(null)
+  })
+})
+
+// Tests for deleting a recipe ================================================
+describe('Deleting recipe', () => {
+  test('should remove the recipe from the database', async () => {
+    const result = await deleteRecipe(createdSampleRecipes[0]._id)
+    expect(result.deletedCount).toEqual(1)
+
+    const deletedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
+    expect(deletedRecipe).toEqual(null)
+  })
+
+  test('should fail if the id does not exist', async () => {
+    const result = await deleteRecipe('000000000000000000000000')
+    expect(result.deletedCount).toEqual(0)
   })
 })
