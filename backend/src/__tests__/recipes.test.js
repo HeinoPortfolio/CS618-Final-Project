@@ -4,6 +4,7 @@ import {
   createRecipe,
   listAllRecipes,
   listRecipesByAuthor,
+  getRecipeById,
 } from '../services/recipes.js'
 import { Recipe } from '../db/models/recipe.js'
 
@@ -122,5 +123,17 @@ describe('Listing recipes', () => {
   test('Should be able to filter recipes by the author', async () => {
     const recipes = await listRecipesByAuthor('Joe Doe')
     expect(recipes.length).toBe(1)
+  })
+})
+
+// Tests for getting a single recipe ==========================================
+describe('Getting a post', () => {
+  test('Should return the full recipe', async () => {
+    const recipe = await getRecipeById(createdSampleRecipes[0]._id)
+    expect(recipe.toObject()).toEqual(createdSampleRecipes[0].toObject())
+  })
+  test('Should fail if the id does not exist', async () => {
+    const recipe = await getRecipeById('000000000000000000000000')
+    expect(recipe).toEqual(null)
   })
 })
