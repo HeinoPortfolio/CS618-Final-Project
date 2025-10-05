@@ -5,6 +5,7 @@ import {
   createRecipe,
   listAllRecipes,
   listRecipesByAuthor,
+  listRecipesByTag,
   getRecipeById,
   updateRecipe,
   deleteRecipe,
@@ -24,12 +25,14 @@ const sampleRecipes = [
     author: 'Jay Smith',
     ingredientList: 'Some ingredients go here again!!!!',
     imageURL: 'http://someUrl2.com',
+    tags: ['onions', 'beef'],
   },
   {
     title: 'Sample Recipe 3',
     author: 'John Brown',
     ingredientList: 'Some ingredients go here again with ingredients!!!!',
     imageURL: 'http://someUrl3.com',
+    tags: ['fried'],
   },
   { title: 'Sample Recipe 4 only title and nothing else' },
 ]
@@ -129,6 +132,10 @@ describe('Listing recipes', () => {
   test('Should be able to filter recipes by the author', async () => {
     const recipes = await listRecipesByAuthor('Joe Doe')
     expect(recipes.length).toBe(1)
+  })
+  test('Should be able filter recipes by tag', async () => {
+    const recipes = await listRecipesByTag('beef')
+    expect(recipes.length).toBe(2)
   })
 })
 

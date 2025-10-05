@@ -30,6 +30,11 @@ export async function listRecipesByAuthor(author, options) {
   return await listRecipes({ author }, options)
 }
 
+// List all recipes by tags ===================================================
+export async function listRecipesByTag(tags, options) {
+  return await listRecipes({ tags }, options)
+}
+
 // Get the recipe by the recipe ID ============================================
 // Will use the Mongoose feature (findById)to find the recipe by the ID =======
 export async function getRecipeById(recipeId) {
