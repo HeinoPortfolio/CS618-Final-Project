@@ -10,6 +10,7 @@ const recipe = new Recipe({
   author: 'Susan Heino',
   ingredientList: 'This is another a simple recipe. \n With a new line.',
   imageURL: 'http://someurl.com',
+  tags: ['chocolate', 'pudding'],
 })
 
 // Save the recipe to the database =======================================

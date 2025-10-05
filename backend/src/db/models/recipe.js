@@ -1,4 +1,4 @@
-// Model for the recipe for the final project
+// Model for the recipe for the final project========================
 import mongoose, { Schema } from 'mongoose'
 
 const recipeSchema = new Schema(
@@ -7,6 +7,7 @@ const recipeSchema = new Schema(
     author: String,
     ingredientList: String,
     imageURL: String,
+    tags: [String],
   },
   { timestamps: true },
 )
