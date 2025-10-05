@@ -17,6 +17,7 @@ const sampleRecipes = [
     author: 'Joe Doe',
     ingredientList: 'Some ingredients go here!!!!',
     imageURL: 'http://someUrl1.com',
+    tags: ['beef'],
   },
   {
     title: 'Sample Recipe 2',
@@ -59,6 +60,7 @@ describe('Creating recipes', () => {
       author: 'John Doe',
       ingredientList: 'Some ingredients go here!!!!',
       imageURL: 'http://someUrl.com',
+      tags: ['beef', 'onion'],
     }
 
     const createdRecipe = await createRecipe(recipe)
@@ -76,6 +78,7 @@ describe('Creating recipes', () => {
       author: 'John Doe',
       ingredientList: 'Some additional ingredients go here!!!!',
       imageURL: 'http://someUrl.com',
+      tags: ['empty'],
     }
     try {
       await createRecipe(recipe)

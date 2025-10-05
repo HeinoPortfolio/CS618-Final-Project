@@ -5,8 +5,9 @@ export async function createRecipe({
   author,
   ingredientList,
   imageURL,
+  tags,
 }) {
-  const recipe = new Recipe({ title, author, ingredientList, imageURL })
+  const recipe = new Recipe({ title, author, ingredientList, imageURL, tags })
 
   return await recipe.save()
 }
