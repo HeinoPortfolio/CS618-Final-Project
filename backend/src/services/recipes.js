@@ -44,11 +44,11 @@ export async function getRecipeById(recipeId) {
 // Update the recipe given a recipe ID ========================================
 export async function updateRecipe(
   recipeId,
-  { title, author, ingredientList, imageURL },
+  { title, author, ingredientList, imageURL, tags },
 ) {
   return await Recipe.findOneAndUpdate(
     { _id: recipeId },
-    { $set: { title, author, ingredientList, imageURL } },
+    { $set: { title, author, ingredientList, imageURL, tags } },
     { new: true },
   )
 }

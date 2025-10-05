@@ -189,7 +189,7 @@ describe('Updating recipes', () => {
 
 // Tests for deleting a recipe ================================================
 describe('Deleting recipe', () => {
-  test('should remove the recipe from the database', async () => {
+  test('Should remove the recipe from the database', async () => {
     const result = await deleteRecipe(createdSampleRecipes[0]._id)
     expect(result.deletedCount).toEqual(1)
 
@@ -197,7 +197,7 @@ describe('Deleting recipe', () => {
     expect(deletedRecipe).toEqual(null)
   })
 
-  test('should fail if the id does not exist', async () => {
+  test('Should fail if the id does not exist', async () => {
     const result = await deleteRecipe('000000000000000000000000')
     expect(result.deletedCount).toEqual(0)
   })
