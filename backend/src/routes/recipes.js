@@ -3,10 +3,13 @@ import {
   listAllRecipes,
   listRecipesByAuthor,
   listRecipesByTag,
+  createRecipe,
   getRecipeById,
+  updateRecipe,
+  deleteRecipe,
 } from '../services/recipes.js'
 
-// updateRecipe, deleteRecipe,
+//
 
 export function recipesRoutes(app) {
   app.get('/api/v1/recipes', async (req, res) => {
@@ -42,4 +45,32 @@ export function recipesRoutes(app) {
       console.error('Error getting recipe', err)
     }
   }) // end get recipe by ID
+  app.post('/api/v1/recipes', async (req, res) => {
+    try {
+      const recipe = await createRecipe(req.body)
+      return res.json(recipe)
+    } catch (err) {
+      console.error('Error creating post', err)
+      return res.status(500).end()
+    }
+  }) // end create recipe
+  app.patch('/api/v1/recipes/:id', async (req, res) => {
+    try {
+      const recipe = await updateRecipe(req.params.id, req.body)
+      return res.json(recipe)
+    } catch (err) {
+      console.error('Error updating recipe', err)
+      return res.status(500).end()
+    }
+  }) // end update post
+  app.delete('/api/v1/recipes/:id', async (req, res) => {
+    try {
+      const { deletedCount } = await deleteRecipe(req.params.id)
+      if (deletedCount === 0) return res.sendStatus(404)
+      return res.status(204).end()
+    } catch (err) {
+      console.error('Error deleting recipe', err)
+      return res.status(500).end()
+    }
+  }) // end delete a recipe
 }
