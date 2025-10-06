@@ -2,11 +2,14 @@ import PropTypes from 'prop-types'
 
 export function Recipe({ title, author, ingredientList, imageURL }) {
   return (
+    
     <article>
       <h3>{title}</h3>
+
       <div>
-        <pre>{ingredientList}</pre>
+        {ingredientList}
       </div>
+      
       {author && (
         <em>
           Written by: <strong>{author}</strong>
