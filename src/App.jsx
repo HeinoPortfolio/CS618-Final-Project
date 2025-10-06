@@ -9,7 +9,7 @@ const recipes = [
   },
   {
     title:'This is another test recipe title',
-    ingredientList: 'Some other ingredients go here. \nMore go here.',
+    ingredientList: 'Some other ingredients go here. \nMore go here. \nand some more',
     author: 'Claudia Heino',
     imageURL: 'http://someUrl1.com',
   },
