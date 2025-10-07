@@ -9,8 +9,6 @@ import {
   deleteRecipe,
 } from '../services/recipes.js'
 
-//
-
 export function recipesRoutes(app) {
   app.get('/api/v1/recipes', async (req, res) => {
     const { sortBy, sortOrder, author, tags } = req.query
