@@ -1,36 +1,31 @@
 import { CreateRecipe } from './components/CreateRecipe.jsx'
-import {RecipeList} from './components/RecipeList.jsx'
-import {RecipeFilter} from './components/RecipeFilter.jsx'
+import { RecipeList } from './components/RecipeList.jsx'
+import { RecipeFilter } from './components/RecipeFilter.jsx'
 import { RecipeSorting } from './components/RecipeSorting.jsx'
+import { useQuery } from '@tanstack/react-query'
+import { getRecipes } from './api/recipes.js'
 
-const recipes = [
-  {
-    title:'This is a test recipe title',
-    ingredientList: 'Some ingredients go here. \nSome others go here.',
-    author: 'Matthew Heino',
-    imageURL: 'http://someUrl1.com',
-  },
-  {
-    title:'This is another test recipe title',
-    ingredientList: 'Some other ingredients go here. \nMore go here. \nand some more',
-    author: 'Claudia Heino',
-    imageURL: 'http://someUrl1.com',
-  },
-]
+export function Blog() {
+  const recipesQuery = useQuery({
+    queryKey: ['recipes'],
+    queryFn: () => getRecipes(),
+  })
 
-export function Blog(){
-	return(
-		<div style={{ padding: 8}}>
+  // Extract the data from the query ========
+  const recipes = recipesQuery.data ?? []
+
+  return (
+    <div style={{ padding: 8 }}>
       <h1>Welcome to the Recipe Blog! </h1>
-			<CreateRecipe />
-			<br />
-			<hr />
-			Filter By:
-			<RecipeFilter field='author' />
-			<br />
-			<RecipeSorting fields={['createdAt', 'updatedAt'] }/>
-			<hr />
-			<RecipeList recipes={recipes} />
-		</div>
-	)
+      <CreateRecipe />
+      <br />
+      <hr />
+      Filter By:
+      <RecipeFilter field='author' />
+      <br />
+      <RecipeSorting fields={['createdAt', 'updatedAt']} />
+      <hr />
+      <RecipeList recipes={recipes} />
+    </div>
+  )
 }
