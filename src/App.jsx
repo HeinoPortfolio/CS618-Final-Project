@@ -1,5 +1,7 @@
-import { RecipeList } from './components/PostList.jsx'
+//import { RecipeList } from './components/PostList.jsx'
+import { CreateRecipe } from './components/CreateRecipe.jsx'
 
+/*
 const recipes = [
   {
     title:'This is a test recipe title',
@@ -14,9 +16,17 @@ const recipes = [
     imageURL: 'http://someUrl1.com',
   },
 ]
+*/
 
+/*
 export function App() {
   return (
     <RecipeList recipes={recipes} />
   )
+}
+*/
+
+export function App(){
+	
+	return <CreateRecipe />
 }
