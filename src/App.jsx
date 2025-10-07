@@ -1,7 +1,8 @@
-//import { RecipeList } from './components/PostList.jsx'
 import { CreateRecipe } from './components/CreateRecipe.jsx'
+import {RecipeList} from './components/RecipeList.jsx'
+import {RecipeFilter} from './components/RecipeFilter.jsx'
+import { RecipeSorting } from './components/RecipeSorting.jsx'
 
-/*
 const recipes = [
   {
     title:'This is a test recipe title',
@@ -16,17 +17,20 @@ const recipes = [
     imageURL: 'http://someUrl1.com',
   },
 ]
-*/
-
-/*
-export function App() {
-  return (
-    <RecipeList recipes={recipes} />
-  )
-}
-*/
 
 export function App(){
-	
-	return <CreateRecipe />
+	return(
+		<div style={{ padding: 8}}>
+      <h1>Welcome to the Recipe Blog! </h1>
+			<CreateRecipe />
+			<br />
+			<hr />
+			Filter By:
+			<RecipeFilter field='author' />
+			<br />
+			<RecipeSorting fields={['createdAt', 'updatedAt'] }/>
+			<hr />
+			<RecipeList recipes={recipes} />
+		</div>
+	)
 }

@@ -6,9 +6,7 @@ export function Recipe({ title, author, ingredientList, imageURL }) {
       <h3>{title}</h3>
 
       <div>
-        <pre>
-          {ingredientList}
-        </pre>
+        <pre>{ingredientList}</pre>
       </div>
 
       {author && (
@@ -16,7 +14,12 @@ export function Recipe({ title, author, ingredientList, imageURL }) {
           Written by: <strong>{author}</strong>
         </em>
       )}
-      <div>Image of recipe: {imageURL}</div>
+
+      <div>
+        <br />
+        Image of recipe: {imageURL}
+        <br /><br />
+      </div>
     </article>
   )
 } // end Recipe
