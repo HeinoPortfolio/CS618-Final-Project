@@ -1,19 +1,25 @@
+// To Create a new recipe = ============================================
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createRecipe } from '../api/recipes.js'
 
+import { useAuth } from '../contexts/AuthContext.jsx'
+
 export function CreateRecipe() {
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
+  //const [author, setAuthor] = useState('')
   const [ingredientList, setIngredientList] = useState('')
   const [imageURL, setImageURL] = useState('')
+
+  // Get the authentication context ===========================================
+  const [token] = useAuth()
 
   // Create the query client ==================================================
   const queryClient = useQueryClient()
 
   // Create the Recipe mutation ===============================================
   const createRecipeMutation = useMutation({
-    mutationFn: () => createRecipe({ title, author, ingredientList, imageURL }),
+    mutationFn: () => createRecipe(token, { title, ingredientList, imageURL }),
     onSuccess: () => queryClient.invalidateQueries(['recipes']),
   })
 
@@ -22,6 +28,9 @@ export function CreateRecipe() {
     e.preventDefault()
     createRecipeMutation.mutate()
   }
+
+  // If there is no token ask to create an account
+  if (!token) return <div>Please login to create a new recipe.</div>
 
   return (
     <form onSubmit={handleSubmit}>
@@ -38,19 +47,7 @@ export function CreateRecipe() {
         />
       </div>
       <br />
-      <div>
-        <label htmlFor='create-author'>
-          {' '}
-          <b> Author: </b>
-        </label>
-        <input
-          type='text'
-          name='create-author'
-          id='create-author'
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-      </div>
+
       <br />
       <div>
         <label htmlFor='create-imageURL'>
@@ -93,7 +90,7 @@ export function CreateRecipe() {
       {createRecipeMutation.isSuccess ? (
         <>
           <br />
-          <br/>
+          <br />
           Recipe created successfully!
         </>
       ) : null}
