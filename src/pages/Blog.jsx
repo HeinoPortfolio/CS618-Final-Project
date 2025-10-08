@@ -1,17 +1,16 @@
-import { CreateRecipe } from './components/CreateRecipe.jsx'
-import { RecipeList } from './components/RecipeList.jsx'
-import { RecipeFilter } from './components/RecipeFilter.jsx'
-import { RecipeSorting } from './components/RecipeSorting.jsx'
+import { CreateRecipe } from '../components/CreateRecipe.jsx'
+import { RecipeList } from '../components/RecipeList.jsx'
+import { RecipeFilter } from '../components/RecipeFilter.jsx'
+import { RecipeSorting } from '../components/RecipeSorting.jsx'
 import { useQuery } from '@tanstack/react-query'
-import { getRecipes } from './api/recipes.js'
+import { getRecipes } from '../api/recipes.js'
+import { Header } from '../components/Header.jsx'
 
 import { useState } from 'react'
 
 export function Blog() {
   const [author, setAuthor] = useState('')
-
   const [sortBy, setSortBy] = useState('createdAt')
-
   const [sortOrder, setSortOrder] = useState('descending')
 
   const recipesQuery = useQuery({
@@ -24,7 +23,10 @@ export function Blog() {
 
   return (
     <div style={{ padding: 8 }}>
-      <h1>Welcome to the Recipe Blog! </h1>
+      <Header />
+      <br />
+      <br />
+      <hr />
       <CreateRecipe />
       <br />
       <hr />
