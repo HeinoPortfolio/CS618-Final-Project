@@ -1,6 +1,6 @@
-// There are currently 15 tests in this file ==========================================
+// There are currently 15 tests in this file ==================================
 import mongoose from 'mongoose'
-import { describe, expect, test, beforeEach } from '@jest/globals'
+import { describe, expect, test, beforeEach, beforeAll } from '@jest/globals'
 import {
   createRecipe,
   listAllRecipes,
@@ -11,7 +11,42 @@ import {
   deleteRecipe,
 } from '../services/recipes.js'
 import { Recipe } from '../db/models/recipe.js'
+import { createUser } from '../services/users.js'
 
+// Initialize the test use and the sample recipes =============================
+let testUser = null
+let sampleRecipes = []
+
+// Before All to create the use and the sample recipes ========================
+beforeAll(async () => {
+  testUser = await createUser({ username: 'sample', password: 'user' })
+
+  sampleRecipes = [
+    {
+      title: 'Sample Recipe 1',
+      author: testUser._id,
+      ingredientList: 'Some ingredients go here!!!!',
+      imageURL: 'http://someUrl1.com',
+      tags: ['beef'],
+    },
+    {
+      title: 'Sample Recipe 2',
+      author: testUser._id,
+      ingredientList: 'Some ingredients go here again!!!!',
+      imageURL: 'http://someUrl2.com',
+      tags: ['onions', 'beef'],
+    },
+    {
+      title: 'Sample Recipe 3',
+      author: testUser._id,
+      ingredientList: 'Some ingredients go here again with ingredients!!!!',
+      imageURL: 'http://someUrl3.com',
+      tags: ['fried'],
+    },
+  ]
+})
+
+/*
 const sampleRecipes = [
   {
     title: 'Sample Recipe 1',
@@ -36,6 +71,7 @@ const sampleRecipes = [
   },
   { title: 'Sample Recipe 4 only title and nothing else' },
 ]
+*/ Recipe
 
 // Before each  ===================================================================
 // To be executed to create items for the database =================================
@@ -60,13 +96,12 @@ describe('Creating recipes', () => {
   test('With all the parameters succeed', async () => {
     const recipe = {
       title: 'A Test Recipe',
-      author: 'John Doe',
       ingredientList: 'Some ingredients go here!!!!',
       imageURL: 'http://someUrl.com',
       tags: ['beef', 'onion'],
     }
 
-    const createdRecipe = await createRecipe(recipe)
+    const createdRecipe = await createRecipe(testUser._id, recipe)
     expect(createdRecipe._id).toBeInstanceOf(mongoose.Types.ObjectId)
 
     const foundRecipe = await Recipe.findById(createdRecipe._id)
@@ -78,13 +113,12 @@ describe('Creating recipes', () => {
   // Test without the title information =====================================
   test('Without title should fail', async () => {
     const recipe = {
-      author: 'John Doe',
       ingredientList: 'Some additional ingredients go here!!!!',
       imageURL: 'http://someUrl.com',
       tags: ['empty'],
     }
     try {
-      await createRecipe(recipe)
+      await createRecipe(testUser._id, recipe)
     } catch (err) {
       expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
       expect(err.message).toContain('`title` is required')
@@ -97,7 +131,7 @@ describe('Creating recipes', () => {
       title: 'Only a simple title',
     }
 
-    const createdRecipe = await createRecipe(recipe)
+    const createdRecipe = await createRecipe(testUser._id, recipe)
     expect(createdRecipe._id).toBeInstanceOf(mongoose.Types.ObjectId)
   })
 })
@@ -130,8 +164,8 @@ describe('Listing recipes', () => {
     )
   })
   test('Should be able to filter recipes by the author', async () => {
-    const recipes = await listRecipesByAuthor('Joe Doe')
-    expect(recipes.length).toBe(1)
+    const recipes = await listRecipesByAuthor(testUser.username)
+    expect(recipes.length).toBe(3)
   })
   test('Should be able filter recipes by tag', async () => {
     const recipes = await listRecipesByTag('beef')
@@ -154,24 +188,24 @@ describe('Getting a post', () => {
 // Tests for updating a recipe ================================================
 describe('Updating recipes', () => {
   test('Should update the specified property', async () => {
-    await updateRecipe(createdSampleRecipes[0]._id, {
-      author: 'Test Author',
+    await updateRecipe(testUser._id, createdSampleRecipes[0]._id, {
+      ingredientList: 'Updated ingredient list',
     })
     const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
-    expect(updatedRecipe.author).toEqual('Test Author')
+    expect(updatedRecipe.ingredientList).toEqual('Updated ingredient list')
   })
 
   test('should not update other properties', async () => {
-    await updateRecipe(createdSampleRecipes[0]._id, {
-      author: 'Test Author',
+    await updateRecipe(testUser._id, createdSampleRecipes[0]._id, {
+      ingredientList: 'Updated ingredient list',
     })
     const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
     expect(updatedRecipe.title).toEqual('Sample Recipe 1')
   })
 
   test('should update the updatedAt timestamp', async () => {
-    await updateRecipe(createdSampleRecipes[0]._id, {
-      author: 'Test Author',
+    await updateRecipe(testUser._id, createdSampleRecipes[0]._id, {
+      ingredientList: 'Updated ingredient list',
     })
     const updatedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
     expect(updatedRecipe.updatedAt.getTime()).toBeGreaterThan(
@@ -180,9 +214,13 @@ describe('Updating recipes', () => {
   })
 
   test('should fail if the id does not exist', async () => {
-    const recipe = await updateRecipe('000000000000000000000000', {
-      author: 'Test Author',
-    })
+    const recipe = await updateRecipe(
+      testUser._id,
+      '000000000000000000000000',
+      {
+        ingredientList: 'Updated ingredient list',
+      },
+    )
     expect(recipe).toEqual(null)
   })
 })
@@ -190,7 +228,7 @@ describe('Updating recipes', () => {
 // Tests for deleting a recipe ================================================
 describe('Deleting recipe', () => {
   test('Should remove the recipe from the database', async () => {
-    const result = await deleteRecipe(createdSampleRecipes[0]._id)
+    const result = await deleteRecipe(testUser._id, createdSampleRecipes[0]._id)
     expect(result.deletedCount).toEqual(1)
 
     const deletedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
