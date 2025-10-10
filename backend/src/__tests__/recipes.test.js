@@ -46,33 +46,6 @@ beforeAll(async () => {
   ]
 })
 
-/*
-const sampleRecipes = [
-  {
-    title: 'Sample Recipe 1',
-    author: 'Joe Doe',
-    ingredientList: 'Some ingredients go here!!!!',
-    imageURL: 'http://someUrl1.com',
-    tags: ['beef'],
-  },
-  {
-    title: 'Sample Recipe 2',
-    author: 'Jay Smith',
-    ingredientList: 'Some ingredients go here again!!!!',
-    imageURL: 'http://someUrl2.com',
-    tags: ['onions', 'beef'],
-  },
-  {
-    title: 'Sample Recipe 3',
-    author: 'John Brown',
-    ingredientList: 'Some ingredients go here again with ingredients!!!!',
-    imageURL: 'http://someUrl3.com',
-    tags: ['fried'],
-  },
-  { title: 'Sample Recipe 4 only title and nothing else' },
-]
-*/ Recipe
-
 // Before each  ===================================================================
 // To be executed to create items for the database =================================
 let createdSampleRecipes = []
